@@ -1,7 +1,7 @@
 import os
 
 # import path to each sprite and append to array
-def import_sprite(path):
+def import_name_sprite(path):
     sprite_list = []
     for _, __, image_files in os.walk(path):
         for image in image_files:
