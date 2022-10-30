@@ -3,26 +3,49 @@ import random
 
 from settings import *
 from support import import_name_sprite
+from day_time import Day_time
+
 
 class Background:
     def __init__(self,screen):
         self.display = screen
 
-        # Background
+        # Setup day time and start day period
+        self.day_time = Day_time()
+        self.game_time = self.day_time.update()
 
-        self.background_image = pygame.image.load('../graphics/background/background.png')
+        self.day_period = self.check_time_period(self.game_time)
+        self.path_image = '../graphics/' + self.day_period
+
+        # Background
+        self.background_image = pygame.image.load(self.path_image + 'background/background.png')
         self.background_image = pygame.transform.scale(self.background_image,(SCREEN_WIDTH,SCREEN_HEIGHT))
         # Elements background
 
         # light cloud
         self.cloud_light_sprite = pygame.sprite.Group()
         self.cloud_light_amount = 30
-        self.spawn_random_position_sprite(self.cloud_light_sprite,'../graphics/cloud-light', CloudLight, self.cloud_light_amount)
+        self.spawn_random_position_sprite(self.cloud_light_sprite,self.path_image + 'cloud-light', CloudLight, self.cloud_light_amount)
 
         # dark cloud
         self.cloud_dark_sprite = pygame.sprite.Group()
         self.cloud_dark_amount = 20
-        self.spawn_random_position_sprite(self.cloud_dark_sprite,'../graphics/cloud-dark',CloudDark, self.cloud_dark_amount)
+        self.spawn_random_position_sprite(self.cloud_dark_sprite,self.path_image + 'cloud-dark',CloudDark, self.cloud_dark_amount)
+
+
+    def check_time_period(self,game_time):
+        self.game_time_hours = int(game_time.split(':')[0])
+
+        if self.game_time_hours >= 6 and self.game_time_hours <= 9:
+            self.day_period = 'sunrise/'
+        elif self.game_time_hours > 9 and self.game_time_hours <= 19:
+            self.day_period = 'day/'
+        elif self.game_time_hours > 19 and self.game_time_hours <= 23:
+            self.day_period = 'sunset/'
+        elif self.game_time_hours >= 0 and self.game_time_hours < 6:
+            self.day_period = 'night/'
+
+        return self.day_period
 
 
     # Spawn object functions
@@ -58,19 +81,22 @@ class Background:
     # Draw objects
     def cloud_light(self):
         if len(self.cloud_light_sprite) < self.cloud_light_amount:
-            self.spawn_new_sprite(self.cloud_light_sprite,'../graphics/cloud-light',CloudLight)
+            self.spawn_new_sprite(self.cloud_light_sprite,self.path_image + 'cloud-light',CloudLight)
 
         self.cloud_light_sprite.draw(self.display)
         self.cloud_light_sprite.update()
 
     def cloud_dark(self):
         if len(self.cloud_dark_sprite) < self.cloud_dark_amount:
-            self.spawn_new_sprite(self.cloud_dark_sprite,'../graphics/cloud-dark',CloudDark)
+            self.spawn_new_sprite(self.cloud_dark_sprite,self.path_image + 'cloud-dark',CloudDark)
 
         self.cloud_dark_sprite.draw(self.display)
         self.cloud_dark_sprite.update()
 
     def run(self):
+        self.game_time = self.day_time.update()
+        self.check_time_period(self.game_time)
+
         self.display.blit(self.background_image,(0,0))
         self.cloud_dark()
         self.cloud_light()

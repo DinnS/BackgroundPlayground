@@ -15,6 +15,7 @@ class Game:
         # Class init
         self.background = Background(self.screen)
 
+
     def close_game(self):
         pygame.quit()
         sys.exit()
@@ -28,8 +29,8 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.close_game()
 
-            # Background setup
 
+            # Background setup
             self.background.run()
 
             # Update screen
