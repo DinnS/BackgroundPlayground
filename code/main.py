@@ -29,7 +29,7 @@ class Game:
                         self.close_game()
 
             # Background setup
-            self.screen.fill((145,205,220))
+
             self.background.run()
 
             # Update screen

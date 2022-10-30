@@ -8,17 +8,21 @@ class Background:
     def __init__(self,screen):
         self.display = screen
 
+        # Background
+
+        self.background_image = pygame.image.load('../graphics/background/background.png')
+        self.background_image = pygame.transform.scale(self.background_image,(SCREEN_WIDTH,SCREEN_HEIGHT))
         # Elements background
 
         # light cloud
         self.cloud_light_sprite = pygame.sprite.Group()
         self.cloud_light_amount = 30
-        self.spawn_random_position_sprite(self.cloud_light_sprite,'../graphics/light_cloud', CloudLight, self.cloud_light_amount)
+        self.spawn_random_position_sprite(self.cloud_light_sprite,'../graphics/cloud-light', CloudLight, self.cloud_light_amount)
 
         # dark cloud
         self.cloud_dark_sprite = pygame.sprite.Group()
         self.cloud_dark_amount = 20
-        self.spawn_random_position_sprite(self.cloud_dark_sprite,'../graphics/dark_cloud',CloudDark, self.cloud_dark_amount)
+        self.spawn_random_position_sprite(self.cloud_dark_sprite,'../graphics/cloud-dark',CloudDark, self.cloud_dark_amount)
 
 
     # Spawn object functions
@@ -54,19 +58,20 @@ class Background:
     # Draw objects
     def cloud_light(self):
         if len(self.cloud_light_sprite) < self.cloud_light_amount:
-            self.spawn_new_sprite(self.cloud_light_sprite,'../graphics/light_cloud',CloudLight)
+            self.spawn_new_sprite(self.cloud_light_sprite,'../graphics/cloud-light',CloudLight)
 
         self.cloud_light_sprite.draw(self.display)
         self.cloud_light_sprite.update()
 
     def cloud_dark(self):
         if len(self.cloud_dark_sprite) < self.cloud_dark_amount:
-            self.spawn_new_sprite(self.cloud_dark_sprite,'../graphics/dark_cloud',CloudDark)
+            self.spawn_new_sprite(self.cloud_dark_sprite,'../graphics/cloud-dark',CloudDark)
 
         self.cloud_dark_sprite.draw(self.display)
         self.cloud_dark_sprite.update()
 
     def run(self):
+        self.display.blit(self.background_image,(0,0))
         self.cloud_dark()
         self.cloud_light()
 
