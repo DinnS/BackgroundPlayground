@@ -32,6 +32,8 @@ class Background:
         self.cloud_dark_amount = 20
         self.spawn_random_position_sprite(self.cloud_dark_sprite,self.path_image + 'cloud-dark',CloudDark, self.cloud_dark_amount)
 
+    def test(self):
+        self.cloud_light_amount = 10
 
     def check_time_period(self,game_time):
         self.game_time_hours = int(game_time.split(':')[0])
@@ -110,7 +112,7 @@ class Sprite(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(sprite_path).convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = [pos_x, pos_y]
+        self.rect.topright = [pos_x, pos_y]
 
         # Permission to decimal movement
         self.pos_x = pos_x
@@ -130,7 +132,7 @@ class CloudLight(Sprite):
 
     def update(self):
         self.check_sprite_status()
-        self.rect.center = [self.pos_x,self.pos_y]
+        self.rect.topright = [self.pos_x,self.pos_y]
         self.pos_x += 1
 
 
@@ -140,7 +142,7 @@ class CloudDark(Sprite):
 
     def update(self):
         self.check_sprite_status()
-        self.rect.center = [self.pos_x,self.pos_y]
+        self.rect.topright = [self.pos_x,self.pos_y]
         self.pos_x += 0.5
 
 

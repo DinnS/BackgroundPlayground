@@ -1,3 +1,7 @@
+from win32api import GetSystemMetrics
+
 # GLOBAL SETTINGS
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+
+# Current screen size (Full screen)
+SCREEN_WIDTH = GetSystemMetrics(0)
+SCREEN_HEIGHT = GetSystemMetrics(1)
