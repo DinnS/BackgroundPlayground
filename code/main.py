@@ -3,7 +3,8 @@ import pygame
 
 from settings import *
 from background import Background
-from day_menu import Day_menu
+from day_time import Day_time
+from ui import UI
 
 class Game:
     def __init__(self):
@@ -13,9 +14,13 @@ class Game:
         pygame.display.set_caption('Background')
         self.clock = pygame.time.Clock()
 
-        # Class init
-        self.background = Background(self.screen)
-        self.day_menu = Day_menu(self.screen)
+        # Own class init
+        self.day_time = Day_time()
+        self.start_day_time = self.day_time.update()
+
+        self.ui = UI(self.screen, self.day_time)
+
+        self.background = Background(self.screen,self.start_day_time)
 
 
     def close_game(self):
@@ -31,12 +36,14 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.close_game()
 
+            # Day time setup
+            self.current_day_time = self.day_time.update()
 
             # Background setup
-            self.background.run()
+            self.background.run(self.current_day_time)
 
             # Day menu setup
-            self.day_menu.run()
+            self.ui.run(self.current_day_time)
 
             # Update screen
             pygame.display.flip()
