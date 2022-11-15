@@ -1,6 +1,7 @@
 import pygame
-from settings import *
+import time
 
+from settings import *
 from sprites import *
 
 
@@ -41,6 +42,11 @@ class UI():
             (4,4),
             'center'
         )
+
+        #self.last_time_clickable_period = pygame.time.get_ticks()
+        self.cooldown_clickable_period = 0.5
+        self.count_clickable_period = 0
+
 
         self.day_period_content_active = False
         self.day_period_content = SpriteUI(
@@ -211,7 +217,6 @@ class UI():
         self.display.blit(self.day_period_arrow.sprite, self.day_period_arrow.rect)
 
 
-
         if self.day_period_content_active:
             self.display.blit(self.day_period_content.sprite, self.day_period_content.rect)
             self.display.blit(self.day_period_sunrise.sprite,self.day_period_sunrise.rect)
@@ -220,38 +225,41 @@ class UI():
             self.display.blit(self.day_period_night.sprite,self.day_period_night.rect)
 
             if pygame.mouse.get_pressed()[0]:
-                if self.day_period_sunrise.rect.collidepoint(mouse_position):
-                    self.icon_active(
-                        self.day_period_sunrise,
-                        '../graphics/ui/day_period/sunrise/icon_sunrise_active.png',
-                        'sunrise',
-                        self.day_period_list
-                    )
-                    self.class_time.change_time(6)
-                elif self.day_period_day.rect.collidepoint(mouse_position):
-                    self.icon_active(
-                        self.day_period_day,
-                        '../graphics/ui/day_period/day/icon_day_active.png',
-                        'day',
-                        self.day_period_list
-                    )
-                    self.class_time.change_time(9)
-                elif self.day_period_sunset.rect.collidepoint(mouse_position):
-                    self.icon_active(
-                        self.day_period_sunset,
-                        '../graphics/ui/day_period/sunset/icon_sunset_active.png',
-                        'sunset',
-                        self.day_period_list
-                    )
-                    self.class_time.change_time(19)
-                elif self.day_period_night.rect.collidepoint(mouse_position):
-                    self.icon_active(
-                        self.day_period_night,
-                        '../graphics/ui/day_period/night/icon_night_active.png',
-                        'night',
-                        self.day_period_list
-                    )
-                    self.class_time.change_time(0)
+                self.current_time_clickable_period = time.time()
+
+                if (self.current_time_clickable_period - self.start_time_clickable_period) >= self.cooldown_clickable_period:
+                    if self.day_period_sunrise.rect.collidepoint(mouse_position):
+                        self.icon_active(
+                            self.day_period_sunrise,
+                            '../graphics/ui/day_period/sunrise/icon_sunrise_active.png',
+                            'sunrise',
+                            self.day_period_list
+                        )
+                        self.class_time.change_time(6)
+                    elif self.day_period_day.rect.collidepoint(mouse_position):
+                        self.icon_active(
+                            self.day_period_day,
+                            '../graphics/ui/day_period/day/icon_day_active.png',
+                            'day',
+                            self.day_period_list
+                        )
+                        self.class_time.change_time(9)
+                    elif self.day_period_sunset.rect.collidepoint(mouse_position):
+                        self.icon_active(
+                            self.day_period_sunset,
+                            '../graphics/ui/day_period/sunset/icon_sunset_active.png',
+                            'sunset',
+                            self.day_period_list
+                        )
+                        self.class_time.change_time(19)
+                    elif self.day_period_night.rect.collidepoint(mouse_position):
+                        self.icon_active(
+                            self.day_period_night,
+                            '../graphics/ui/day_period/night/icon_night_active.png',
+                            'night',
+                            self.day_period_list
+                        )
+                        self.class_time.change_time(0)
 
         if pygame.mouse.get_pressed()[0] and self.day_period_button.rect.collidepoint(mouse_position):
             self.day_period_button.slide(1,SCREEN_WIDTH - self.day_period_content.width,False)
@@ -260,6 +268,7 @@ class UI():
                 self.day_period_content_active = False
             elif not(self.day_period_content_active):
                 self.day_period_content_active = True
+                self.start_time_clickable_period = time.time()
 
     def set_active_period(self):
         if self.class_time.game_hour >= 6 and self.class_time.game_hour < 9:
@@ -405,7 +414,6 @@ class UI():
         self.set_active_period()
         self.day_time(time)
         self.day_period(pygame.mouse.get_pos())
-
         self.weather_options(pygame.mouse.get_pos())
 
 

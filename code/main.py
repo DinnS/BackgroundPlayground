@@ -20,7 +20,7 @@ class Game:
 
         self.ui = UI(self.screen, self.day_time)
 
-        self.background = Background(self.screen,self.start_day_time)
+        self.background = Background(self.screen,self.start_day_time,self.ui)
 
 
     def close_game(self):
