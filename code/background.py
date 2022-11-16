@@ -13,7 +13,7 @@ class Background:
         self.game_time = current_day_time
 
         self.background_animation_index = 0
-        self.background_animation_speed = 0.05
+        self.background_animation_speed = 0.25
 
         self.current_weather = self.ui.current_weather
         self.day_period = self.check_time_period(self.game_time)
